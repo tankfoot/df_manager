@@ -8,15 +8,39 @@ token_list = {
               'confirm_page': '0e4800ee137944d7a196997baae98102'
               }
 
+action_format = {
+                'current_page':None,
+                'destination_page':None,
+                'Speech':None,
+                'Entity': None
+                }
+
+intent_name = None
+action_complete = None
+
 def flow_control(dataJson):
     dataStr = json.loads(dataJson)
     a = DialogflowApi(client_token = token_list[dataStr['currentPage']])
-    response = a.post_query(dataStr['query'])
-    df_response = response.json()
-#    action = data['result']['fulfillment']['speech']
+    df_response = a.post_query(dataStr['query'])
+    response = df_response.json()
+    print(response)
 
-    return df_response
+    if 'intentName' in response['result']['metadata']:
+        intent_name =  response['result']['metadata']['intentName'] 
+    else:
+        intent_name = None
 
-def response_handler(dataJson):
-    dataStr = json.loads(dataJson)
+    print(intent_name)
+    action_format['current_page'] = dataStr['currentPage']
+    action_format['Speech'] = response['result']['fulfillment']['speech']
 
+    if 'parameters' in response['result']:
+        action_format['Entity'] = response['result']['parameters']
+    else:
+        action_format['Entity'] = None
+
+    return json.dumps(action_format)
+
+def destination_handler(current_page, intent_name):
+    
+    return response
