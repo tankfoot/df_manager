@@ -7,9 +7,10 @@ class DialogflowApi:
     Interface to dialogflow api request
     '''
 
-    def __init__(self, developer_token=None, client_token=None):
+    def __init__(self, developer_token=None, client_token=None, session_id='123'):
         self._developer_token = developer_token
         self._client_token = client_token
+        self._session_id = session_id
         self.version = '20150910'
         self._base_url = 'https://api.dialogflow.com/v1/'
 
@@ -58,12 +59,12 @@ class DialogflowApi:
         return response.json()
 
     '''Query '''
-    def post_query(self, query, sessionID='123'):
+    def post_query(self, query):
         data = {
             "contexts": [],
             "lang": "en",
             "query": query,
-            "sessionId": sessionID,
+            "sessionId": self._session_id,
             "timezone": "America/San_Francisco"
         }
         response = requests.post(self._query_url,
