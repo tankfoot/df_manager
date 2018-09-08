@@ -42,7 +42,10 @@ class DialogflowApi:
         if entity_id:
             entity_id = '/' + entity_id
         return '{}entities{}?v={}'.format(self._base_url, entity_id, self.version)
-
+    
+    def _context_url(self, session_id):
+        return '{}contexts?sessionId={}'.format(self._base_url, session_id)
+        
     '''JSON Requests and Response'''
     def _json_get(self, endpoint):
         response = requests.get(endpoint, headers=self._dev_header)
@@ -55,6 +58,10 @@ class DialogflowApi:
 
     def _json_put(self, endpoint, data):
         response = requests.put(endpoint, headers=self._dev_header, data=json.dumps(data))
+        return response.json()
+
+    def _json_delete(self, endpoint):
+        response = requests.delete(endpoint, headers=self._client_header)
         return response.json()
 
     '''Query '''
@@ -87,3 +94,10 @@ class DialogflowApi:
     def put_entity(self, entity_id, entity_json):
         #Update an existing entity with entity_id
         return self._json_put(self._entity_url(entity_id), data=entity_json)
+
+    '''Contexts'''
+    def post_context():
+        return
+
+    def delete_context(self, sessionID='123'):
+        return self._json_delete
